@@ -4,7 +4,7 @@
 
 using namespace std;
 int main(int argc,char * argv[]){
-    //Ouverture du fichier test-PMR_simple.csv
+    //Ouverture du fichier input
     ifstream in_file;
     const char *filename = argv[1];
     string str(filename);
@@ -12,7 +12,6 @@ int main(int argc,char * argv[]){
 
     if(in_file.is_open()){
         ofstream out_file;
-        // Si fichier ouvert, affichage des lignes avec numero d'occurrence ajoute
         cout << filename <<" is opened"<<endl;
         string line;
         int occurrence = 1;
@@ -38,7 +37,7 @@ int main(int argc,char * argv[]){
                 }
             }
         }
-        //fermeture du fichier
+        //fermeture des fichiers
         out_file.close();
         in_file.close();
         // fichier d'entrée pour gnuplot
