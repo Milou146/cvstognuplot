@@ -4,23 +4,26 @@
 
 using namespace std;
 int main(int argc,char * argv[]){
-    //Ouverture du fichier input
+    // opening input files
     ifstream in_file;
     const char *filename = argv[1];
     string str(filename);
     in_file.open(filename);
 
     if(in_file.is_open()){
-        ofstream out_file;
-        cout << filename <<" is opened"<<endl;
+        cout << filename <<" is opened"<< endl;
+        ofstream out_dat_file;
+        ofstream out_dem_file;
         string line;
         int occurrence = 1;
-        //lecture ligne a ligne jusque fin du fichier
-        out_file.open("output.dat"); 
-        if(out_file.is_open()){
+        out_dat_file.open("output.dat");
+        out_dem_file.open("output.dem");
+        // line-by-line reading until end of file
+        if(out_dat_file.is_open() && out_dem_file.is_open()){
+            cout << "output.dem or output.dat is opened"<<endl;
             while(!in_file.eof() && line != "\"traffic\",,"){
                 getline(in_file, line);
-                if(line == "\"Node\",," || line == "\"traffic\",,"){ // on s'arrête juste avant
+                if(line == "\"Node\",," || line == "\"traffic\",,"){
                     cout << occurrence++ << " : type 1 : " << line << endl;
                 }
                 else{
@@ -33,17 +36,20 @@ int main(int argc,char * argv[]){
                         line.replace(0,1,"",0);
                     }
                     line.replace(2,1,"   ",3);
-                    out_file << line << endl;
+                    out_dat_file << line << endl;
                 }
             }
         }
-        //fermeture des fichiers
-        out_file.close();
+        else{
+            cout << "output.dem or output.dat is not opened"<<endl;
+        }
+        // closing files
+        out_dat_file.close();
         in_file.close();
-        // fichier d'entrée pour gnuplot
-        out_file.open("output.in"); 
-        out_file << "plot 'output.dat' with lines" << endl;
-        out_file.close();
+        // gnuplot output file
+        out_dem_file << "plot 'output.dat' with lines" << endl;
+        out_dem_file << "pause -1 \" (-> return)\"" << endl;
+        out_dem_file.close();
     }else{
         cout << filename <<" is not opened"<<endl;
     }

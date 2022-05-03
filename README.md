@@ -1,11 +1,9 @@
-Compiler : g++ main.cpp -o main
+Compile : g++ main.cpp -o main
 
-Executer : ./main nomfichier.cvs
+Execute : ./main filename.cvs
 
-Exemple : ./main test-PMR_simple.csv
+Example : ./main test-PMR_simple.csv
 
-Sortie : output.in et ouput.dat
+Output : output.dem and ouput.dat
 
-output.in : fichier d'entrée de gnu plot
-
-output.dat le fichier data que peut lire gnuplot
+Draw the graph : gnuplot output.dem

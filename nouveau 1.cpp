@@ -83,7 +83,7 @@ Node parse2(vector<string> vect) {
 vector<int> parse4(vector<string> vect) {
 	vector<int> vect_id;
 	for (string element : vect) {
-		int num_node = atoi(element.substr(5, element.length() - 6).c_str())
+		int num_node = atoi(element.substr(5, element.length() - 6).c_str());
 		vect_id.push_back();
 	}
 	return vect_id;
