@@ -7,9 +7,8 @@
 
 #include "File.h"
 #include <fstream>
-#include <string>
 
-File::File(string path) {
+File::File(std::string path) {
 	content =
 }
 

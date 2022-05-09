@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include <stdlib.h>
-#include <node.h>
+#include <Node.h>
 
 using namespace std;
 

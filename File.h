@@ -7,12 +7,12 @@
 
 #ifndef FILE_H_
 #define FILE_H_
-
+#include <fstream>
 class File {
 private:
-	string content;
+	std::string content;
 public:
-	File();
+	File(std::string path);
 	virtual ~File();
 	bool check_valid();
 };

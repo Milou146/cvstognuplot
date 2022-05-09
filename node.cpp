@@ -7,13 +7,20 @@
 
 #include "Node.h"
 
-Node::Node(int num, int x, int y) {
-	node_num = num;
-	node_x = x;
-	node_y = y;
+Node::Node(int id, int x, int y) {
+    node_id = id;
+    node_x = x;
+    node_y = y;
 }
 
-Node::~Node() {
-	// TODO Auto-generated destructor stub
+int Node::get_X() {
+    return node_x;
 }
 
+int Node::get_Y() {
+    return node_y;
+}
+
+int Node::get_id() {
+    return node_id;
+}
