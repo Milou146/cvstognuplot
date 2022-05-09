@@ -9,7 +9,6 @@
 #include <fstream>
 
 File::File(std::string path) {
-	content =
 }
 
 File::~File() {

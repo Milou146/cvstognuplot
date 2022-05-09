@@ -1,8 +1,6 @@
-
-Projet-C++v2.pdf
-main
-output.dat
-output.dem
-premier-rendu.zip
-antartic.dat
-example
+*.o
+*.run
+*.pdf
+*.zip
+*.dat
+*.dem
