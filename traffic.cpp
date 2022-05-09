@@ -1,4 +1,4 @@
-#include"Traffic.h"
+#include"traffic.h"
 #include <istream>
 
 using namespace std;

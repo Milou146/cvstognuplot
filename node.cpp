@@ -5,7 +5,7 @@
  *      Author: jcomble
  */
 
-#include "Node.h"
+#include "node.h"
 
 Node::Node(int id, int x, int y) {
     node_id = id;

@@ -5,7 +5,7 @@
  *      Author: jcomble
  */
 
-#include "File.h"
+#include "file.h"
 #include <fstream>
 
 File::File(std::string path) {
