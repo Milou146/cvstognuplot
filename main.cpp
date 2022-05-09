@@ -115,19 +115,20 @@ int main(int argc,char * argv[]){
 				if(check_vect(vect) == 2){
 					Node node = parse2(vect);
                     out_dat_file << node.get_X() << "," << node.get_Y() << endl;
+        			out_dem_file << "set label \"Node" << node.get_id() << "\"  at " << node.get_X() << "," << node.get_Y() << endl;
 				}
             }
+			// closing files
+			out_dat_file.close();
+			in_file.close();
+			// gnuplot output file
+			out_dem_file << "plot 'output.dat' with lines" << endl;
+			out_dem_file << "pause -1 \" (-> return)\"" << endl;
+			out_dem_file.close();
         }
         else{
             cout << "output.dem or output.dat is not opened"<<endl;
         }
-        // closing files
-        out_dat_file.close();
-        in_file.close();
-        // gnuplot output file
-        out_dem_file << "plot 'output.dat' with lines" << endl;
-        out_dem_file << "pause -1 \" (-> return)\"" << endl;
-        out_dem_file.close();
     }else{
         cout << filename <<" is not opened"<<endl;
     }
