@@ -51,13 +51,13 @@ bool is_named_node(string chaine) {
 }
 
 int check_vect(vector<string> vect) {
-	if (vect.at(0) == "\"Node\"" && vect.at(1) == "" && vect.at(2) == "") {
+	if (vect.size() == 3 && vect.at(0) == "\"Node\"" && vect.at(1) == "" && vect.at(2) == "") {
 		return 1;
-	} else if (is_named_node(vect.at(0)) && isNumber(vect.at(1)) && isNumber(vect.at(2))) {
+	} else if (vect.size() == 3 && is_named_node(vect.at(0)) && isNumber(vect.at(1)) && isNumber(vect.at(2))) {
 		return 2;
-	} else if (vect.at(0) == "\"traffic\"" && vect.at(1) == "" && vect.at(2) == "") {
+	} else if (vect.size() == 3 && vect.at(0) == "\"traffic\"" && vect.at(1) == "" && vect.at(2) == "") {
 		return 3;
-	} else if (vect.at(0) == "\"connection\"" && vect.at(1) == "" && vect.at(2) == "") {
+	} else if (vect.size() == 3 && vect.at(0) == "\"connection\"" && vect.at(1) == "" && vect.at(2) == "") {
 		return 5;
 	} else {
 		bool check = true;
