@@ -76,7 +76,7 @@ Node parse2(vector<string> vect) {
 	int num_node = atoi(vect[0].substr(5, vect[0].length() - 6).c_str());
 	int node_x = atoi(vect[1].c_str());
 	int node_y = atoi(vect[2].c_str());
-	Node node = new Node(num_node, node_x, node_y);
+	Node node = Node(num_node, node_x, node_y);
 	return node;
 }
 
@@ -84,7 +84,7 @@ vector<int> parse4(vector<string> vect) {
 	vector<int> vect_id;
 	for (string element : vect) {
 		int num_node = atoi(element.substr(5, element.length() - 6).c_str());
-		vect_id.push_back();
+		vect_id.push_back(num_node);
 	}
 	return vect_id;
 }

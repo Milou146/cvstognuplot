@@ -1,11 +1,21 @@
+/*
+ * Node.h
+ *
+ *  Created on: 9 mai 2022
+ *      Author: jcomble
+ */
+
+#ifndef NODE_H_
+#define NODE_H_
+
 class Node {
-	private:
-		int node_id;
-		int node_x;
-		int node_y;
-	public:
-		Node(int id, int x, int y);
-		int get_X();
-		int get_Y();
-		int get_id();
+private:
+	int node_num;
+	int node_x;
+	int node_y;
+public:
+	Node(int num, int x, int y);
+	virtual ~Node();
 };
+
+#endif /* NODE_H_ */
