@@ -109,20 +109,33 @@ int main(int argc,char * argv[]){
         // line-by-line reading until end of file
         if(out_dat_file.is_open() && out_dem_file.is_open()){
             cout << "output.dem or output.dat is opened"<<endl;
+			Node * nodeArray [100]; // we cant have more than an hundred nodes
             while(!in_file.eof()){
                 getline(in_file, line);
 				vector<string> vect = get_vector(line);
-				if(check_vect(vect) == 2){
+				short type = check_vect(vect);
+				if(type == 2){
 					Node node = parse2(vect);
+					nodeArray[node.get_id()] = &node;
+					cout << "inserting Node" << node.get_id() << endl;
                     out_dat_file << node.get_X() << "," << node.get_Y() << endl;
         			out_dem_file << "set label \"Node" << node.get_id() << "\"  at " << node.get_X() << "," << node.get_Y() << endl;
+				}
+				else if(type == 4){
+					string f = vect.at(0).substr(5,1);// first
+					string s = vect.at(1).substr(5,1);// seconde
+					cout << stoi(f) << "," << stoi(s) << endl;// debug
+					Node fnode = *nodeArray[stoi(f)];// first node
+					Node snode = *nodeArray[stoi(s)];// seconde node
+					// write the connection
+                    out_dat_file << endl << fnode.get_X() << "," << fnode.get_Y() << endl << snode.get_X() << "," << snode.get_Y() << endl;
 				}
             }
 			// closing files
 			out_dat_file.close();
 			in_file.close();
 			// gnuplot output file
-			out_dem_file << "plot 'output.dat' with lines" << endl;
+			out_dem_file << "plot 'output.dat' every :::1::20 with lp, "" every :::0::0 with points;" << endl;
 			out_dem_file << "pause -1 \" (-> return)\"" << endl;
 			out_dem_file.close();
         }
