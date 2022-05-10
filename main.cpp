@@ -68,7 +68,7 @@ bool is_named_node(string chaine) {
  * 4) ("Node[0-9]*",)*"Node[0-9]*"
  * 6) else
  */
-int check_vect(vector<string> vect) {
+short check_vect(vector<string> vect) {
 	if (vect.size() == 3 && vect.at(0) == "\"Node\"" && vect.at(1) == "" && vect.at(2) == "") {
 		return 1;
 	} else if (vect.size() == 3 && is_named_node(vect.at(0)) && isNumber(vect.at(1)) && isNumber(vect.at(2))) {
@@ -113,15 +113,31 @@ vector<int> parse4(vector<string> vect) {
 	}
 	return vect_id;
 }
+void write_type_2(Node * nodeArray [100], vector<string> vect, ofstream out_dat_file, ofstream out_dem_file) {
+	Node node = parse2(vect);
+	nodeArray[node.get_id()] = &node;
+	cout << "inserting Node" << node.get_id() << endl;
+	out_dat_file << node.get_X() << "," << node.get_Y() << endl;
+	out_dem_file << "set label \"Node" << node.get_id() << "\"  at " << node.get_X() << "," << node.get_Y() << endl;
+}
+
+void write_type_4(Node * nodeArray [100], vector<string> vect, ofstream out_dat_file, ofstream out_dem_file) {
+	string f = vect.at(0).substr(5,1);// first
+	string s = vect.at(1).substr(5,1);// seconde
+	cout << stoi(f) << "," << stoi(s) << endl;// debug
+	Node fnode = *nodeArray[stoi(f)];// first node
+	Node snode = *nodeArray[stoi(s)];// seconde node
+	// write the connection
+	out_dat_file << endl << fnode.get_X() << "," << fnode.get_Y() << endl << snode.get_X() << "," << snode.get_Y() << endl;
+}
 
 int main(int argc,char * argv[]){
     // opening input files
-    ifstream in_file;
     if (argc > 1) {
+    	ifstream in_file;
 		const char *filename = argv[1];
 		string str(filename);
 		in_file.open(filename);
-
 		if(in_file.is_open()){
 			cout << filename <<" is opened"<< endl;
 			ofstream out_dat_file;
@@ -134,26 +150,23 @@ int main(int argc,char * argv[]){
 			if(out_dat_file.is_open() && out_dem_file.is_open()){
 				cout << "output.dem or output.dat is opened"<<endl;
 				Node * nodeArray [100]; // we cant have more than an hundred nodes
+				bool check = true;
+				int count=0;
 				while(!in_file.eof()){
 					getline(in_file, line);
 					vector<string> vect = get_vector(line);
 					short type = check_vect(vect);
-					if(type == 2){
-						Node node = parse2(vect);
-						nodeArray[node.get_id()] = &node;
-						cout << "inserting Node" << node.get_id() << endl;
-						out_dat_file << node.get_X() << "," << node.get_Y() << endl;
-						out_dem_file << "set label \"Node" << node.get_id() << "\"  at " << node.get_X() << "," << node.get_Y() << endl;
+					if (type == 2){
+						write_type_2(nodeArray, vect, out_dat_file, out_dem_file);
 					}
 					else if(type == 4){
-						string f = vect.at(0).substr(5,1);// first
-						string s = vect.at(1).substr(5,1);// seconde
-						cout << stoi(f) << "," << stoi(s) << endl;// debug
-						Node fnode = *nodeArray[stoi(f)];// first node
-						Node snode = *nodeArray[stoi(s)];// seconde node
-						// write the connection
-						out_dat_file << endl << fnode.get_X() << "," << fnode.get_Y() << endl << snode.get_X() << "," << snode.get_Y() << endl;
+						write_type_4(nodeArray, vect, out_dat_file, out_dem_file);
 					}
+				}
+				if (check){
+
+				} else {
+
 				}
 				// closing files
 				out_dat_file.close();
