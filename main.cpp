@@ -15,15 +15,10 @@ vector<string> get_vector(const string chaine) {
 	string copy_chaine = chaine;
 	while (copy_chaine.find(",") != string::npos) {
 		string tmp_string = copy_chaine.substr(0, copy_chaine.find(","));
-	vect.push_back(tmp_string);
+		vect.push_back(tmp_string);
 		copy_chaine = copy_chaine.substr(copy_chaine.find(",") + 1, copy_chaine.length() - tmp_string.length() - 1);
 	}
-	if (copy_chaine != "") {
-		vect.push_back(copy_chaine);
-	}
-	for (int i = 0; i < vect.size(); i++){
-		cout << vect.at(i) << endl;
-	}
+	vect.push_back(copy_chaine);
 	return vect;
 }
 
@@ -69,6 +64,9 @@ bool is_named_node(string chaine) {
  * 6) else
  */
 short check_vect(vector<string> vect) {
+	if (vect.size() == 1 && vect.at(0) == "") {
+		return 7;
+	}
 	if (vect.size() == 3 && vect.at(0) == "\"Node\"" && vect.at(1) == "" && vect.at(2) == "") {
 		return 1;
 	} else if (vect.size() == 3 && is_named_node(vect.at(0)) && isNumber(vect.at(1)) && isNumber(vect.at(2))) {
@@ -89,6 +87,8 @@ short check_vect(vector<string> vect) {
 			return 4;
 		}
 	}
+	cout << "Longueur :" << vect.size() << vect.at(0);
+	cout << "longueur premier argument" << vect.at(0).length();
 	return 6;
 }
 
@@ -117,7 +117,6 @@ vector<int> parse4(vector<string> vect) {
 void write_type_2(Node * nodeArray [], vector<string> vect, ofstream *out_dat_file, ofstream *out_dem_file) {
 	Node node = parse2(vect);
 	nodeArray[node.get_id()] = &node;
-	cout << "inserting Node" << node.get_id() << endl;
 	*out_dat_file << node.get_X() << "," << node.get_Y() << endl;
 	*out_dem_file << "set label \"Node" << node.get_id() << "\"  at " << node.get_X() << "," << node.get_Y() << endl;
 }
@@ -125,7 +124,6 @@ void write_type_2(Node * nodeArray [], vector<string> vect, ofstream *out_dat_fi
 void write_type_4(Node * nodeArray [], vector<string> vect, ofstream *out_dat_file, ofstream *out_dem_file) {
 	string f = vect.at(0).substr(5,1);// first
 	string s = vect.at(1).substr(5,1);// seconde
-	cout << stoi(f) << "," << stoi(s) << endl;// debug
 	Node fnode = *nodeArray[stoi(f)];// first node
 	Node snode = *nodeArray[stoi(s)];// seconde node
 	// write the connection
@@ -145,43 +143,57 @@ int main(int argc,char * argv[]){
 			out_dat_file.open("output.dat");
 			out_dem_file.open("output.dem");
 			// line-by-line reading until end of file
-			if(out_dat_file.is_open() && out_dem_file.is_open()){
-				cout << "output.dem or output.dat is opened"<<endl;
+			if (out_dat_file.is_open() && out_dem_file.is_open()) {
+				cout << "output.dem or output.dat is opened" << endl;
 				Node * nodeArray [100]; // we cant have more than an hundred nodes
 				bool check = true;
 				int count = 0;
-				while(!in_file.eof()){
+				while (!in_file.eof()){
 					getline(in_file, line);
 					vector<string> vect = get_vector(line);
 					short type = check_vect(vect);
+					cout << line << endl;
 					if (count == 0) {
-						if (type == 1) {
+						cout << "count = 0" << endl;
+						cout << "Type = " << type << endl;
+						if (type == 7) {
+							;
+						} else if (type == 1) {
+							cout << "Node" << endl;
 							count = 1;
 						} else {
 							check=false;
 							break;
 						}
 					} else if (count == 1) {
-						if (type == 2){
+						if (type == 7) {
+							;
+						} else if (type == 2){
 							write_type_2(&*nodeArray, vect, &out_dat_file, &out_dem_file);
 						} else if (type == 3) {
 							count = 2;
+							cout << "Traffic" << endl;
 						} else {
 							check = false;
 							break;
 						}
 
 					} else if (count == 2) {
-						if(type == 4) {
+						if (type == 7) {
+							;
+						} else if(type == 4) {
 							write_type_4(&*nodeArray, vect, &out_dat_file, &out_dem_file);
 						} else if (type == 5) {
 							count = 3;
+							cout << "Connection" << endl;
 						} else {
 							check = false;
 							break;
 						}
 					} else {
-						if (type == 4) {
+						if (type == 7) {
+							;
+						} else if (type == 4) {
 							write_type_4(&*nodeArray, vect, &out_dat_file, &out_dem_file);
 						} else {
 							check = false;
@@ -192,6 +204,7 @@ int main(int argc,char * argv[]){
 				if (check){
 					out_dem_file << "plot 'output.dat' every :::1::20 with lp, "" every :::0::0 with points;" << endl;
 					out_dem_file << "pause -1 \" (-> return)\"" << endl;
+					cout << "Converted" << endl;
 				} else {
 					cout << "File not in the right format" << endl;
 				}
@@ -200,7 +213,6 @@ int main(int argc,char * argv[]){
 				in_file.close();
 				// gnuplot output file
 				out_dem_file.close();
-				cout << "Converted" << endl;
 			} else {
 				cout << "output.dem or output.dat is not opened"<<endl;
 			}
