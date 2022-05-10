@@ -113,37 +113,35 @@ vector<int> parse4(vector<string> vect) {
 	}
 	return vect_id;
 }
-void write_type_2(Node * nodeArray [100], vector<string> vect, ofstream out_dat_file, ofstream out_dem_file) {
+
+void write_type_2(Node * nodeArray [], vector<string> vect, ofstream *out_dat_file, ofstream *out_dem_file) {
 	Node node = parse2(vect);
 	nodeArray[node.get_id()] = &node;
 	cout << "inserting Node" << node.get_id() << endl;
-	out_dat_file << node.get_X() << "," << node.get_Y() << endl;
-	out_dem_file << "set label \"Node" << node.get_id() << "\"  at " << node.get_X() << "," << node.get_Y() << endl;
+	*out_dat_file << node.get_X() << "," << node.get_Y() << endl;
+	*out_dem_file << "set label \"Node" << node.get_id() << "\"  at " << node.get_X() << "," << node.get_Y() << endl;
 }
 
-void write_type_4(Node * nodeArray [100], vector<string> vect, ofstream out_dat_file, ofstream out_dem_file) {
+void write_type_4(Node * nodeArray [], vector<string> vect, ofstream *out_dat_file, ofstream *out_dem_file) {
 	string f = vect.at(0).substr(5,1);// first
 	string s = vect.at(1).substr(5,1);// seconde
 	cout << stoi(f) << "," << stoi(s) << endl;// debug
 	Node fnode = *nodeArray[stoi(f)];// first node
 	Node snode = *nodeArray[stoi(s)];// seconde node
 	// write the connection
-	out_dat_file << endl << fnode.get_X() << "," << fnode.get_Y() << endl << snode.get_X() << "," << snode.get_Y() << endl;
+	*out_dat_file << endl << fnode.get_X() << "," << fnode.get_Y() << endl << snode.get_X() << "," << snode.get_Y() << endl;
 }
 
 int main(int argc,char * argv[]){
-    // opening input files
-    if (argc > 1) {
-    	ifstream in_file;
+	// opening input files
+	if (argc > 1) {
+		ifstream in_file;
 		const char *filename = argv[1];
-		string str(filename);
 		in_file.open(filename);
 		if(in_file.is_open()){
-			cout << filename <<" is opened"<< endl;
 			ofstream out_dat_file;
 			ofstream out_dem_file;
 			string line;
-			int occurrence = 1;
 			out_dat_file.open("output.dat");
 			out_dem_file.open("output.dem");
 			// line-by-line reading until end of file
@@ -157,10 +155,10 @@ int main(int argc,char * argv[]){
 					vector<string> vect = get_vector(line);
 					short type = check_vect(vect);
 					if (type == 2){
-						write_type_2(nodeArray, vect, out_dat_file, out_dem_file);
+						write_type_2(&*nodeArray, vect, &out_dat_file, &out_dem_file);
 					}
 					else if(type == 4){
-						write_type_4(nodeArray, vect, out_dat_file, out_dem_file);
+						write_type_4(&*nodeArray, vect, &out_dat_file, &out_dem_file);
 					}
 				}
 				if (check){
@@ -182,8 +180,9 @@ int main(int argc,char * argv[]){
 		}else{
 			cout << filename <<" is not opened"<<endl;
 		}
-	  return 0;
-    } else {
-    	cout << "No file in args, (main arg1.csv)";
-    }
+		return 0;
+	} else {
+		cout << "No file in args, (main arg1.csv)";
+	}
+	return 1;
 }
