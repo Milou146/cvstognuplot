@@ -117,7 +117,7 @@ vector<int> parse4(vector<string> vect) {
 void write_type_2(Node nodeArray [], vector<string> vect, ofstream *out_dat_file, ofstream *out_dem_file) {
 	Node node = parse2(vect);
 	nodeArray[node.get_id()] = node;
-	*out_dat_file << node.get_X() << "," << node.get_Y() << endl;
+	*out_dat_file << node.get_X() << "  " << node.get_Y() << endl;
 	*out_dem_file << "set label \"Node" << node.get_id() << "\"  at " << node.get_X() << "," << node.get_Y() << endl;
 }
 
@@ -128,7 +128,7 @@ void write_type_4(Node nodeArray [], vector<string> vect, ofstream *out_dat_file
 	Node snode = nodeArray[stoi(s)];// seconde node
 	// write the connection
 	cout << "Connection : " << fnode.get_id() << endl;
-	*out_dat_file << endl << fnode.get_X() << "," << fnode.get_Y() << endl << snode.get_X() << "," << snode.get_Y() << endl;
+	*out_dat_file << endl << fnode.get_X() << "  " << fnode.get_Y() << endl << snode.get_X() << "  " << snode.get_Y() << endl;
 }
 
 int main(int argc,char * argv[]){
@@ -203,7 +203,7 @@ int main(int argc,char * argv[]){
 					}
 				}
 				if (check){
-					out_dem_file << "plot 'output.dat' every :::1::20 with lp, "" every :::0::0 with points;" << endl;
+					out_dem_file << "plot 'output.dat' every :::1::20 with lp, \"\" every :::0::0 with points;" << endl;
 					out_dem_file << "pause -1 \" (-> return)\"" << endl;
 					cout << "Converted" << endl;
 				} else {
