@@ -149,35 +149,62 @@ int main(int argc,char * argv[]){
 				cout << "output.dem or output.dat is opened"<<endl;
 				Node * nodeArray [100]; // we cant have more than an hundred nodes
 				bool check = true;
-				int count=0;
+				int count = 0;
 				while(!in_file.eof()){
 					getline(in_file, line);
 					vector<string> vect = get_vector(line);
 					short type = check_vect(vect);
-					if (type == 2){
-						write_type_2(&*nodeArray, vect, &out_dat_file, &out_dem_file);
-					}
-					else if(type == 4){
-						write_type_4(&*nodeArray, vect, &out_dat_file, &out_dem_file);
+					if (count == 0) {
+						if (type == 1) {
+							count = 1;
+						} else {
+							check=false;
+							break;
+						}
+					} else if (count == 1) {
+						if (type == 2){
+							write_type_2(&*nodeArray, vect, &out_dat_file, &out_dem_file);
+						} else if (type == 3) {
+							count = 2;
+						} else {
+							check = false;
+							break;
+						}
+
+					} else if (count == 2) {
+						if(type == 4) {
+							write_type_4(&*nodeArray, vect, &out_dat_file, &out_dem_file);
+						} else if (type == 5) {
+							count = 3;
+						} else {
+							check = false;
+							break;
+						}
+					} else {
+						if (type == 4) {
+							write_type_4(&*nodeArray, vect, &out_dat_file, &out_dem_file);
+						} else {
+							check = false;
+							break;
+						}
 					}
 				}
 				if (check){
-
+					out_dem_file << "plot 'output.dat' every :::1::20 with lp, "" every :::0::0 with points;" << endl;
+					out_dem_file << "pause -1 \" (-> return)\"" << endl;
 				} else {
-
+					cout << "File not in the right format" << endl;
 				}
 				// closing files
 				out_dat_file.close();
 				in_file.close();
 				// gnuplot output file
-				out_dem_file << "plot 'output.dat' every :::1::20 with lp, "" every :::0::0 with points;" << endl;
-				out_dem_file << "pause -1 \" (-> return)\"" << endl;
 				out_dem_file.close();
-			}
-			else{
+				cout << "Converted" << endl;
+			} else {
 				cout << "output.dem or output.dat is not opened"<<endl;
 			}
-		}else{
+		} else {
 			cout << filename <<" is not opened"<<endl;
 		}
 		return 0;
