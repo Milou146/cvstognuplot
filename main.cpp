@@ -114,19 +114,20 @@ vector<int> parse4(vector<string> vect) {
 	return vect_id;
 }
 
-void write_type_2(Node * nodeArray [], vector<string> vect, ofstream *out_dat_file, ofstream *out_dem_file) {
+void write_type_2(Node nodeArray [], vector<string> vect, ofstream *out_dat_file, ofstream *out_dem_file) {
 	Node node = parse2(vect);
-	nodeArray[node.get_id()] = &node;
+	nodeArray[node.get_id()] = node;
 	*out_dat_file << node.get_X() << "," << node.get_Y() << endl;
 	*out_dem_file << "set label \"Node" << node.get_id() << "\"  at " << node.get_X() << "," << node.get_Y() << endl;
 }
 
-void write_type_4(Node * nodeArray [], vector<string> vect, ofstream *out_dat_file, ofstream *out_dem_file) {
+void write_type_4(Node nodeArray [], vector<string> vect, ofstream *out_dat_file, ofstream *out_dem_file) {
 	string f = vect.at(0).substr(5,1);// first
 	string s = vect.at(1).substr(5,1);// seconde
-	Node fnode = *nodeArray[stoi(f)];// first node
-	Node snode = *nodeArray[stoi(s)];// seconde node
+	Node fnode = nodeArray[stoi(f)];// first node
+	Node snode = nodeArray[stoi(s)];// seconde node
 	// write the connection
+	cout << "Connection : " << fnode.get_id() << endl;
 	*out_dat_file << endl << fnode.get_X() << "," << fnode.get_Y() << endl << snode.get_X() << "," << snode.get_Y() << endl;
 }
 
@@ -145,7 +146,7 @@ int main(int argc,char * argv[]){
 			// line-by-line reading until end of file
 			if (out_dat_file.is_open() && out_dem_file.is_open()) {
 				cout << "output.dem or output.dat is opened" << endl;
-				Node * nodeArray [100]; // we cant have more than an hundred nodes
+				Node nodeArray[100]; // we cant have more than an hundred nodes
 				bool check = true;
 				int count = 0;
 				while (!in_file.eof()){
@@ -169,7 +170,7 @@ int main(int argc,char * argv[]){
 						if (type == 7) {
 							;
 						} else if (type == 2){
-							write_type_2(&*nodeArray, vect, &out_dat_file, &out_dem_file);
+							write_type_2(nodeArray, vect, &out_dat_file, &out_dem_file);
 						} else if (type == 3) {
 							count = 2;
 							cout << "Traffic" << endl;
@@ -182,7 +183,7 @@ int main(int argc,char * argv[]){
 						if (type == 7) {
 							;
 						} else if(type == 4) {
-							write_type_4(&*nodeArray, vect, &out_dat_file, &out_dem_file);
+							write_type_4(nodeArray, vect, &out_dat_file, &out_dem_file);
 						} else if (type == 5) {
 							count = 3;
 							cout << "Connection" << endl;
@@ -194,7 +195,7 @@ int main(int argc,char * argv[]){
 						if (type == 7) {
 							;
 						} else if (type == 4) {
-							write_type_4(&*nodeArray, vect, &out_dat_file, &out_dem_file);
+							write_type_4(nodeArray, vect, &out_dat_file, &out_dem_file);
 						} else {
 							check = false;
 							break;

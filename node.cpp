@@ -13,6 +13,12 @@ Node::Node(int id, int x, int y) {
     node_y = y;
 }
 
+Node::Node(){
+    node_id = 0;
+    node_x = 0;
+    node_y = 0;
+}
+
 int Node::get_X() {
     return node_x;
 }

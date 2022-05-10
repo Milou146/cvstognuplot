@@ -13,6 +13,7 @@ class Node {
         int node_y;
     public:
         Node(int id, int x, int y);
+        Node();
         int get_X();
         int get_Y();
         int get_id();
