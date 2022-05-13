@@ -2,8 +2,9 @@
 #include <vector>
 #include <string>
 #include <stdlib.h>
-#include <fstream> 
+#include <fstream>
 #include "node.h"
+#include "file.h"
 
 using namespace std;
 
@@ -154,55 +155,71 @@ int main(int argc,char * argv[]){
 					vector<string> vect = get_vector(line);
 					short type = check_vect(vect);
 					cout << line << endl;
-					if (count == 0) {
-						cout << "count = 0" << endl;
-						cout << "Type = " << type << endl;
-						if (type == 7) {
-							;
-						} else if (type == 1) {
-							cout << "Node" << endl;
-							count = 1;
-						} else {
-							check=false;
+					switch (count){
+						case 0:
+							cout << "count = 0" << endl;
+							cout << "Type = " << type << endl;
+							switch (type) {
+								case 7:
+									break;
+								case 1:
+									cout << "Node" << endl;
+									count = 1;
+									break;
+								default:
+									check = false;
+							}
 							break;
-						}
-					} else if (count == 1) {
-						if (type == 7) {
-							;
-						} else if (type == 2){
-							write_type_2(nodeArray, vect, &out_dat_file, &out_dem_file);
-						} else if (type == 3) {
-							count = 2;
-							cout << "Traffic" << endl;
-						} else {
-							check = false;
+						case 1:
+							switch (type) {
+								case 7:
+									break;
+								case 2:
+									write_type_2(nodeArray, vect, &out_dat_file, &out_dem_file);
+									break;
+								case 3:
+									count = 2;
+									cout << "Traffic" << endl;
+									break;
+								default:
+									check = false;
+									break;
+							}
 							break;
-						}
-
-					} else if (count == 2) {
-						if (type == 7) {
-							;
-						} else if(type == 4) {
-							write_type_4(nodeArray, vect, &out_dat_file, &out_dem_file);
-						} else if (type == 5) {
-							count = 3;
-							cout << "Connection" << endl;
-						} else {
-							check = false;
+						case 2:
+							switch (type) {
+								case 7:
+									break;
+								case 4:
+									write_type_4(nodeArray, vect, &out_dat_file, &out_dem_file);
+									break;
+								case 5:
+									count = 3;
+									cout << "Connection" << endl;
+									break;
+								default:
+									check = false;
+									break;
+							}
 							break;
-						}
-					} else {
-						if (type == 7) {
-							;
-						} else if (type == 4) {
-							write_type_4(nodeArray, vect, &out_dat_file, &out_dem_file);
-						} else {
-							check = false;
+						default:
+							switch (type) {
+								case 7:
+									break;
+								case 4:
+									write_type_4(nodeArray, vect, &out_dat_file, &out_dem_file);
+									break;
+								default:
+									check = false;
+									break;
+							}
 							break;
-						}
+					}
+					if (!check) {
+						break;
 					}
 				}
-				if (check){
+				if (check) {
 					out_dem_file << "plot 'output.dat' every :::1::20 with lp, \"\" every :::0::0 with points;" << endl;
 					out_dem_file << "pause -1 \" (-> return)\"" << endl;
 					cout << "Converted" << endl;
